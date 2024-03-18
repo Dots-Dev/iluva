@@ -10,6 +10,8 @@ data class Store(
     val location: StoreLocation
 )
 
+typealias Stores = List<Store>
+
 data class StoreSetting(
     val theme: Int,
     val domain: String? = null,

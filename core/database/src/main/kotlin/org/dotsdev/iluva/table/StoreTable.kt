@@ -1,15 +1,10 @@
 package org.dotsdev.iluva.table
 
-import kotlinx.coroutines.Dispatchers
 import kotlinx.datetime.Instant
-import org.dotsdev.iluva.dao.StoreDao
-import org.dotsdev.iluva.entity.StoreEntity
-import org.dotsdev.liuva.Store
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 object StoreTable : UUIDTable("stores") {
     val name: Column<String> = varchar("name", 50)
