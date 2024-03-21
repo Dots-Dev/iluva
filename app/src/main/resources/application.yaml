@@ -2,6 +2,8 @@ env: development
 ktor:
   deployment:
     port: "$PORT:8080"
+    watch:
+      - classes
   development: true
   application:
     modules:

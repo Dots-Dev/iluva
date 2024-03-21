@@ -13,7 +13,7 @@ import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.response.respond
 import org.dotsdev.iluva.TokenProvider
 import org.dotsdev.iluva.principal.UserPrincipal
-import org.dotsdev.iluva.transaction.UserTransaction
+import org.dotsdev.iluva.database.transaction.UserTransaction
 import org.kodein.di.instance
 import org.kodein.di.ktor.closestDI
 

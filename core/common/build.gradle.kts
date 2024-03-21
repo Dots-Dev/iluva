@@ -1,10 +1,15 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 dependencies {
-    api(libs.arrow.core)
-    api(libs.arrow.fx.coroutines)
+    implementation(libs.arrow.core)
+    implementation(libs.arrow.fx.coroutines)
 
-    api(libs.kodein)
+    implementation(libs.kodein)
+
+    implementation(libs.thing)
+
+    implementation(libs.ktor.serialization.kotlinx.json.jvm)
 }

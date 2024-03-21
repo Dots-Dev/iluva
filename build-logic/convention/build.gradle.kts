@@ -12,3 +12,12 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ktor.gradlePlugin)
 }
+
+gradlePlugin {
+    plugins {
+        register("ktorApi") {
+            id = "iluva.api"
+            implementationClass = "IluvaApiConventionPlugin"
+        }
+    }
+}

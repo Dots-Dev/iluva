@@ -6,10 +6,8 @@ import com.auth0.jwt.algorithms.Algorithm
 import config.JWTConfig
 import io.ktor.server.auth.jwt.JWTCredential
 import java.util.Date
-import org.dotsdev.liuva.response.TokenResponse
 
 interface ITokenProvider {
-    fun create(id: String): TokenResponse
     fun verifyType(token: String): String
     fun verify(token: String): String?
     fun expiration(token: String): Date
@@ -31,11 +29,6 @@ class TokenProvider(private val config: JWTConfig) : ITokenProvider {
     private val authSubject = "Authentication"
     private val tokenTypeClaim = "TokenType"
     val userIdClaim = "UserID"
-
-    override fun create(id: String) = TokenResponse(
-        accessToken = createAccessToken(id, getExpiration()),
-        refreshToken = createRefreshToken(id, getExpiration(refreshValidityInMs))
-    )
 
     override fun verifyType(token: String): String = verifier.verify(token).claims[tokenTypeClaim]!!.asString()
 

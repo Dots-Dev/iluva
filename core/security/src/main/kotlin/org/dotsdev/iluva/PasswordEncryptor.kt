@@ -8,12 +8,12 @@ interface IPasswordEncryptor {
     fun encrypt(password: String): String
 }
 
-object PasswordEncryptor : IPasswordEncryptor {
-    private const val LETTERS: String = "abcdefghijklmnopqrstuvwxyz"
-    private const val UPPERCASE_LETTERS: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    private const val NUMBERS: String = "0123456789"
-    private const val SPECIAL: String = "@#=+!£$%&?"
-    private const val ALGORITHM = "SHA1PRNG"
+class PasswordEncryptor : IPasswordEncryptor {
+    private val letters: String = "abcdefghijklmnopqrstuvwxyz"
+    private val uppercaseLetters: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    private val numbers: String = "0123456789"
+    private val special: String = "@#=+!£$%&?"
+    private val algorithm = "SHA1PRNG"
 
     fun generatePassword(
         isWithLetter: Boolean = true,
@@ -25,12 +25,12 @@ object PasswordEncryptor : IPasswordEncryptor {
         var result = ""
         var i = 0
 
-        if (isWithLetter) result += LETTERS
-        if (isWithUppercase) result += UPPERCASE_LETTERS
-        if (isWithNumbers) result += NUMBERS
-        if (isWithSpecial) result += SPECIAL
+        if (isWithLetter) result += letters
+        if (isWithUppercase) result += uppercaseLetters
+        if (isWithNumbers) result += numbers
+        if (isWithSpecial) result += special
 
-        val random = SecureRandom.getInstance(ALGORITHM)
+        val random = SecureRandom.getInstance(algorithm)
         val stringBuilder = StringBuilder(length)
 
         do {

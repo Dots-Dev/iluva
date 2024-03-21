@@ -1,3 +1,4 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.iluva.api)
+    alias(libs.plugins.kotlin.serialization)
 }

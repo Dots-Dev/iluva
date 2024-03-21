@@ -9,6 +9,9 @@ import org.dotsdev.iluva.plugin.configureAuthentication
 import org.dotsdev.iluva.plugin.configureCohort
 import org.dotsdev.iluva.plugin.configureContentNegotiation
 import org.dotsdev.iluva.plugin.configureDI
+import org.dotsdev.iluva.plugin.configureRouting
+import org.dotsdev.iluva.plugin.configureStatusPage
+import org.dotsdev.iluva.plugin.configureSwaggerUI
 
 fun main(args: Array<String>) = SuspendApp {
     resourceScope {
@@ -22,4 +25,7 @@ fun Application.module() {
     configureAuthentication()
     configureCohort()
     configureContentNegotiation()
+    configureStatusPage()
+    configureRouting()
+    configureSwaggerUI()
 }

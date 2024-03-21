@@ -21,7 +21,7 @@ rootProject.name = "liuva"
 include(":app")
 include(listOf(
     ":core:common",
-    ":core:database",
+    ":core:data",
     ":core:model",
     ":core:security"
 ))
