@@ -9,3 +9,6 @@ fun DependencyHandler.api(dependencyNotation: Any): Dependency? =
 
 fun DependencyHandler.ksp(dependencyNotation: Any): Dependency? =
     add("ksp", dependencyNotation)
+
+fun DependencyHandler.testImplementation(dependencyNotation: Any): Dependency? =
+    add("testImplementation", dependencyNotation)

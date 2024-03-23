@@ -7,20 +7,25 @@ import io.ktor.server.plugins.BadRequestException
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.request.httpMethod
 import io.ktor.server.response.respond
-import io.ktor.server.response.respondText
 import model.HttpResponse
 import org.dotsdev.iluva.exception.authStatusPages
 
 fun Application.configureStatusPage() {
     install(StatusPages) {
         status(HttpStatusCode.MethodNotAllowed) { call, _ ->
-            call.respondText(
-                "Method ${call.request.httpMethod.value} is not allowed",
-                status = HttpStatusCode.MethodNotAllowed
+            call.respond(
+                HttpStatusCode.MethodNotAllowed,
+                HttpResponse.error(
+                    "Method ${call.request.httpMethod.value} is not allowed",
+                    HttpStatusCode.MethodNotAllowed
+                )
             )
         }
         exception<BadRequestException> { call, cause ->
-            call.respond(HttpResponse.badRequest(cause.message.orEmpty()))
+            call.respond(HttpStatusCode.BadRequest, HttpResponse.badRequest(cause.message.orEmpty()))
+        }
+        status(HttpStatusCode.Unauthorized) { call, _ ->
+            call.respond(HttpStatusCode.Unauthorized, HttpResponse.unauthorized("Unauthorized"))
         }
         authStatusPages()
     }

@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.or
 
 
 class UserTransaction {
-    suspend fun create(params: User): User = dbQuery {
+    suspend fun create(params: User): String = dbQuery {
         UserEntity.new {
             firstName = params.firstName.orEmpty()
             lastName = params.lastName
@@ -20,7 +20,7 @@ class UserTransaction {
             phoneNumber = params.phoneNumber
             createdAt = Clock.System.now()
         }
-    }.toDomain()
+    }.id.value.toString()
 
     suspend fun findByID(value: String): User? = dbQuery {
         UserEntity.findById(UUID.fromString(value))

@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.iluva.test)
 }
 
 dependencies {
@@ -14,4 +15,7 @@ dependencies {
 
     implementation(libs.flyway.core)
     implementation(libs.flyway.database.pgsql)
+
+    testImplementation(libs.kotest.extensions.test.containers)
+    testImplementation(libs.test.containers.postgresql)
 }

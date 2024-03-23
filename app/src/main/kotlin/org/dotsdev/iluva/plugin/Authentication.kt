@@ -8,12 +8,11 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
-import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.jwt.jwt
 import io.ktor.server.response.respond
 import org.dotsdev.iluva.TokenProvider
-import org.dotsdev.iluva.principal.UserPrincipal
 import org.dotsdev.iluva.database.transaction.UserTransaction
+import org.dotsdev.iluva.principal.UserPrincipal
 import org.kodein.di.instance
 import org.kodein.di.ktor.closestDI
 
@@ -23,7 +22,7 @@ fun Application.configureAuthentication() {
     val userTransaction by closestDI().instance<UserTransaction>()
 
     install(Authentication) {
-        jwt("jwt") {
+        jwt {
             realm = config.jwt.realm
             verifier(helper.verifier)
             challenge { _, _ ->

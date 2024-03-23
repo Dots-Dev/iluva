@@ -19,5 +19,9 @@ gradlePlugin {
             id = "iluva.api"
             implementationClass = "IluvaApiConventionPlugin"
         }
+        register("test") {
+            id = "iluva.test"
+            implementationClass = "IluvaTestConventionPlugin"
+        }
     }
 }

@@ -7,10 +7,11 @@ import io.ktor.server.response.respond
 import model.HttpResponse
 import org.dotsdev.iluva.dto.request.LoginRequest
 import org.dotsdev.iluva.dto.request.RegisterRequest
+import org.dotsdev.iluva.dto.response.AuthResponse
 import org.slf4j.LoggerFactory
 import so.kciter.thing.validator.ValidationResult
 
-class AuthController(
+class AuthService(
     private val tokenProvider: TokenProvider,
     private val passwordEncryptor: IPasswordEncryptor,
     private val authRepository: AuthRepository,
@@ -23,9 +24,15 @@ class AuthController(
 
         when (val result = request.validate()) {
             is ValidationResult.Valid -> {
-                val user = authRepository.findUser(request)
+                val user = authRepository.findUserByEmail(request)
 
-                user.fold({ throw it }) { call.respond(HttpResponse.ok(it)) }
+                user.fold({ throw it }) {
+                    if (passwordEncryptor.validate(request.password, it.password.orEmpty()).not()) {
+                        throw BadRequestException("Invalid credentials")
+                    }
+                    val token = tokenProvider.create(it.id.toString())
+                    call.respond(HttpResponse.ok(AuthResponse(token.accessToken, token.refreshToken)))
+                }
             }
 
             is ValidationResult.Invalid -> {
@@ -41,9 +48,13 @@ class AuthController(
 
         when (val result = request.validate()) {
             is ValidationResult.Valid -> {
-                val newUser = authRepository.createUser(request)
+                val hashedPassword = passwordEncryptor.encrypt(request.password)
+                val newUser = authRepository.createUser(request.copy(password = hashedPassword))
 
-                newUser.fold({ throw it }) { call.respond(HttpResponse.ok(it)) }
+                newUser.fold({ throw it }) {
+                    val token = tokenProvider.create(it)
+                    call.respond(HttpResponse.ok(AuthResponse(token.accessToken, token.refreshToken)))
+                }
             }
             is ValidationResult.Invalid -> throw BadRequestException(result.errors.first().message)
         }

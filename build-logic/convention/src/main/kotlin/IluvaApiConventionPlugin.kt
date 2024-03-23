@@ -7,6 +7,7 @@ class IluvaApiConventionPlugin : Plugin<Project> {
         pluginManager.apply {
             apply("org.jetbrains.kotlin.jvm")
             apply("com.google.devtools.ksp")
+            apply("iluva.test")
         }
 
         dependencies {
@@ -17,6 +18,7 @@ class IluvaApiConventionPlugin : Plugin<Project> {
 
             implementation(libs.findLibrary("ktor.server.resources.jvm").get())
             implementation(libs.findLibrary("ktor.server.status.pages.jvm").get())
+            implementation(libs.findLibrary("ktor.server.auth.jvm").get())
             implementation(libs.findLibrary("ktor.serialization.kotlinx.json.jvm").get())
 
             implementation(libs.findLibrary("arrow.core").get())

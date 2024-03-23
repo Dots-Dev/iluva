@@ -4,14 +4,14 @@ import io.github.smiley4.ktorswaggerui.dsl.resources.post
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.resources.resource
 import io.ktor.server.routing.Route
-import org.dotsdev.iluva.AuthController
+import org.dotsdev.iluva.AuthService
 import org.dotsdev.iluva.dto.request.LoginRequest
 import org.kodein.di.instance
 import org.kodein.di.ktor.closestDI
 
 
 fun Route.authRouter() {
-    val controller by closestDI().instance<AuthController>()
+    val controller by closestDI().instance<AuthService>()
     resource<Auth> {
         post<Auth.Login>({
             description = "Login Endpoint"

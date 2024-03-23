@@ -6,5 +6,5 @@ import org.kodein.di.instance
 
 val authModule = DI.Module("auth-api") {
     bindSingleton { AuthRepository(instance()) }
-    bindSingleton { AuthController(instance(), instance(), instance()) }
+    bindSingleton { AuthService(instance(), instance(), instance()) }
 }

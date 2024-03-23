@@ -8,7 +8,7 @@ import org.kodein.di.bindSingleton
 import org.kodein.di.instance
 
 val dataModule = DI.Module("database") {
-    bindEagerSingleton { IluvaDatabase(instance()) }
+    bindEagerSingleton { IluvaDatabase(instance()).initDatabase() }
 
     bindSingleton { UserTransaction() }
 }

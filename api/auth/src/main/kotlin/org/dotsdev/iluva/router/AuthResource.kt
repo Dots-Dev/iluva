@@ -9,4 +9,7 @@ class Auth {
 
     @Resource("register")
     class Register
+
+    @Resource("refresh")
+    class RefreshToken
 }
