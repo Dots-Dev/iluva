@@ -1,29 +1,24 @@
 package org.dotsdev.iluva.database.transaction
 
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.extensions.install
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.extensions.testcontainers.JdbcDatabaseContainerExtension
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import java.util.UUID
 import org.dotsdev.iluva.User
 import org.dotsdev.iluva.database.table.UserTable
-import org.jetbrains.exposed.sql.Database
+import org.dotsdev.iluva.database.repository.UserPersistence
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.testcontainers.containers.PostgreSQLContainer
 
 class UserTransactionTest : FunSpec({
-    val psql = PostgreSQLContainer<Nothing>("pgvector/pgvector:pg16").apply {
-        startupAttempts = 1
+    beforeTest {
+        transaction {
+            SchemaUtils.create(UserTable)
+        }
     }
-    val ds = install(JdbcDatabaseContainerExtension(psql))
-    Database.connect(ds)
-    transaction {
-        SchemaUtils.create(UserTable)
-    }
-    val transaction = UserTransaction()
+
+    val transaction = UserPersistence()
     val email = "mail@mail.com"
     val phoneNumber = "12345"
 
@@ -31,7 +26,7 @@ class UserTransactionTest : FunSpec({
         test("create user should return user id") {
             val id = transaction.create(User(firstName = "John"))
 
-            val user = transaction.findByID(id)
+            val user = transaction.find(id)
 
             user shouldNotBe null
             user?.id shouldBe UUID.fromString(id)
@@ -50,7 +45,7 @@ class UserTransactionTest : FunSpec({
         test("findByID should return user by given id") {
             val userId = transaction.create(User())
 
-            val user = transaction.findByID(userId)
+            val user = transaction.find(userId)
 
             user shouldNotBe null
             user?.id shouldBe UUID.fromString(userId)
@@ -60,7 +55,7 @@ class UserTransactionTest : FunSpec({
             val id = UUID.randomUUID()
             transaction.create(User())
 
-            val user = transaction.findByID(id.toString())
+            val user = transaction.find(id.toString())
 
             user shouldBe null
         }

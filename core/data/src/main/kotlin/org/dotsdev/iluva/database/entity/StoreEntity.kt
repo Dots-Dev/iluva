@@ -1,12 +1,12 @@
 package org.dotsdev.iluva.database.entity
 
 import java.util.UUID
-import org.dotsdev.iluva.database.table.StoreLocationTable
-import org.dotsdev.iluva.database.table.StoreSettingTable
-import org.dotsdev.iluva.database.table.StoreTable
 import org.dotsdev.iluva.Store
 import org.dotsdev.iluva.StoreLocation
 import org.dotsdev.iluva.StoreSetting
+import org.dotsdev.iluva.database.table.StoreLocationTable
+import org.dotsdev.iluva.database.table.StoreSettingTable
+import org.dotsdev.iluva.database.table.StoreTable
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.UUIDEntity
@@ -20,9 +20,12 @@ class StoreEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var description by StoreTable.description
     var tagline by StoreTable.tagline
     var logo by StoreTable.logo
+    var isDefault by StoreTable.isDefault
     var createdAt by StoreTable.createdAt
     var updatedAt by StoreTable.updatedAt
     var user by UserEntity referencedOn StoreTable.user
+    var settings by StoreSettingEntity referencedOn StoreTable.setting
+    val location by StoreLocationEntity backReferencedOn StoreLocationTable.store
 
     fun toDomain() = Store(
         id = id.value,
@@ -30,8 +33,8 @@ class StoreEntity(id: EntityID<UUID>) : UUIDEntity(id) {
         description = description,
         tagline = tagline,
         logo = logo,
-        setting = StoreSettingEntity.find { StoreSettingTable.store eq id }.first().toDomain(),
-        location = StoreLocationEntity.find { StoreLocationTable.store eq id }.first().toDomain()
+        setting = settings.toDomain(),
+        location = location.toDomain()
     )
 }
 
@@ -44,7 +47,6 @@ class StoreSettingEntity(id: EntityID<Int>) : IntEntity(id) {
     var currencyCode by StoreSettingTable.currencyCode
     var isActive by StoreSettingTable.isActive
     var isStoreEnabled by StoreSettingTable.isStoreEnabled
-    var store by StoreEntity referencedOn StoreSettingTable.store
     var createdAt by StoreSettingTable.createdAt
     var updatedAt by StoreSettingTable.updatedAt
 
@@ -68,9 +70,9 @@ class StoreLocationEntity(id: EntityID<Int>) : IntEntity(id) {
     var zipCode by StoreLocationTable.zipCode
     var latitude by StoreLocationTable.latitude
     var longitude by StoreLocationTable.longitude
-    var store by StoreEntity referencedOn StoreLocationTable.store
     var createdAt by StoreLocationTable.createdAt
     var updatedAt by StoreLocationTable.updatedAt
+    var store by StoreEntity referencedOn StoreLocationTable.store
 
     fun toDomain() = StoreLocation(
         address = address,

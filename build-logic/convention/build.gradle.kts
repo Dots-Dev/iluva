@@ -15,13 +15,17 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("ktorApi") {
+        register("api") {
             id = "iluva.api"
             implementationClass = "IluvaApiConventionPlugin"
         }
         register("test") {
             id = "iluva.test"
             implementationClass = "IluvaTestConventionPlugin"
+        }
+        register("koin") {
+            id = "iluva.koin"
+            implementationClass = "IluvaKoinConventionPlugin"
         }
     }
 }

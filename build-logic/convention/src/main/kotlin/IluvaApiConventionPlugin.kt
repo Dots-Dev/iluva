@@ -21,15 +21,9 @@ class IluvaApiConventionPlugin : Plugin<Project> {
             implementation(libs.findLibrary("ktor.server.auth.jvm").get())
             implementation(libs.findLibrary("ktor.serialization.kotlinx.json.jvm").get())
 
-            implementation(libs.findLibrary("arrow.core").get())
-            implementation(libs.findLibrary("arrow.fx.coroutines").get())
-
-            implementation(libs.findLibrary("kodein").get())
-            implementation(libs.findLibrary("kodein.ktor.server.jvm").get())
-
             implementation(libs.findLibrary("ktor.swagger.ui").get())
 
-            implementation(libs.findLibrary("thing").get())
+            implementation(libs.findBundle("arrow").get())
         }
     }
 

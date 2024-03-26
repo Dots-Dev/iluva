@@ -8,7 +8,6 @@ import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.request.httpMethod
 import io.ktor.server.response.respond
 import model.HttpResponse
-import org.dotsdev.iluva.exception.authStatusPages
 
 fun Application.configureStatusPage() {
     install(StatusPages) {
@@ -21,12 +20,17 @@ fun Application.configureStatusPage() {
                 )
             )
         }
+        status(HttpStatusCode.UnsupportedMediaType) { call, cause ->
+            call.respond(
+                HttpStatusCode.UnsupportedMediaType,
+                HttpResponse.error(cause.description, HttpStatusCode.UnsupportedMediaType)
+            )
+        }
         exception<BadRequestException> { call, cause ->
             call.respond(HttpStatusCode.BadRequest, HttpResponse.badRequest(cause.message.orEmpty()))
         }
         status(HttpStatusCode.Unauthorized) { call, _ ->
             call.respond(HttpStatusCode.Unauthorized, HttpResponse.unauthorized("Unauthorized"))
         }
-        authStatusPages()
     }
 }

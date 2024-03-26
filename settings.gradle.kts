@@ -23,7 +23,8 @@ include(listOf(
     ":core:common",
     ":core:data",
     ":core:model",
-    ":core:security"
+    ":core:security",
+    ":core:testing"
 ))
 include(listOf(
     ":api:auth",

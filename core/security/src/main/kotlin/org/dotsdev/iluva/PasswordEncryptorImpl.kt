@@ -3,12 +3,12 @@ package org.dotsdev.iluva
 import at.favre.lib.crypto.bcrypt.BCrypt
 import java.security.SecureRandom
 
-interface IPasswordEncryptor {
+interface PasswordEncryptor {
     fun validate(input: String, expected: String): Boolean
     fun encrypt(password: String): String
 }
 
-class PasswordEncryptor : IPasswordEncryptor {
+class PasswordEncryptorImpl : PasswordEncryptor {
     private val letters: String = "abcdefghijklmnopqrstuvwxyz"
     private val uppercaseLetters: String = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     private val numbers: String = "0123456789"

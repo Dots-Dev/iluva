@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.iluva.test)
+    alias(libs.plugins.iluva.koin)
 }
 
 group = "org.dotsdev"
@@ -44,17 +44,17 @@ dependencies {
 
     implementation(libs.arrow.suspendapp)
     implementation(libs.arrow.suspendapp.ktor)
-    implementation(libs.arrow.core)
-    implementation(libs.arrow.fx.coroutines)
 
-    implementation(libs.kodein)
-    implementation(libs.kodein.ktor.server.jvm)
+    implementation(libs.bundles.arrow)
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.logger.slf4j)
 
     implementation(libs.hoplite.core)
     implementation(libs.hoplite.yaml)
 
     implementation(libs.hikari)
 
-    testImplementation(libs.ktor.server.tests.jvm)
-    testImplementation(libs.kotlin.test.junit)
+    testImplementation(projects.core.testing)
 }

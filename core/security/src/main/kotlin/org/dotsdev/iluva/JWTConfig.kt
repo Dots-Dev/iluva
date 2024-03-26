@@ -1,4 +1,4 @@
-package config
+package org.dotsdev.iluva
 
 data class JWTConfig(
     val issuer: String,

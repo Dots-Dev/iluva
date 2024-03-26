@@ -3,7 +3,6 @@ package org.dotsdev.iluva
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import config.JWTConfig
 import io.ktor.server.auth.jwt.JWTCredential
 import java.util.Date
 
@@ -50,7 +49,7 @@ class TokenProvider(private val config: JWTConfig) : ITokenProvider {
         .withClaim(userIdClaim, id)
         .withClaim(tokenTypeClaim, type.name)
         .withExpiresAt(expiration)
-        .sign(Algorithm.HMAC256(config.secret))
+        .sign(Algorithm.HMAC512(config.secret))
 
     private fun getExpiration(validity: Long = validityInMs) = Date(System.currentTimeMillis() + validity)
 }

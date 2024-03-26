@@ -1,14 +1,13 @@
 package org.dotsdev.iluva.di
 
-import org.dotsdev.iluva.database.IluvaDatabase
-import org.dotsdev.iluva.database.transaction.UserTransaction
-import org.kodein.di.DI
-import org.kodein.di.bindEagerSingleton
-import org.kodein.di.bindSingleton
-import org.kodein.di.instance
+import org.dotsdev.iluva.database.DatabaseFactory
+import org.dotsdev.iluva.database.DatabaseFactoryImpl
+import org.dotsdev.iluva.database.repository.StorePersistence
+import org.dotsdev.iluva.database.repository.UserPersistence
+import org.koin.dsl.module
 
-val dataModule = DI.Module("database") {
-    bindEagerSingleton { IluvaDatabase(instance()).initDatabase() }
-
-    bindSingleton { UserTransaction() }
+val dataModule = module {
+    single<DatabaseFactory> { DatabaseFactoryImpl() }
+    single { UserPersistence() }
+    single { StorePersistence() }
 }

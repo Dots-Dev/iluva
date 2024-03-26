@@ -4,6 +4,7 @@ import kotlinx.datetime.Instant
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
 object StoreTable : UUIDTable("stores") {
@@ -11,7 +12,9 @@ object StoreTable : UUIDTable("stores") {
     val description: Column<String?> = text("description").nullable()
     val tagline: Column<String?> = text("tagline").nullable()
     val logo: Column<String?> = text("logo").nullable()
-    val user = reference("user", UserTable)
+    val isDefault: Column<Boolean> = bool("is_default").default(false)
+    val user = reference("user", UserTable, onDelete = ReferenceOption.CASCADE)
+    val setting = reference("settings", StoreSettingTable)
     val createdAt: Column<Instant> = timestamp("created_at")
     val updatedAt: Column<Instant?> = timestamp("updated_at").nullable()
 }
@@ -23,7 +26,6 @@ object StoreSettingTable : IntIdTable("store_settings") {
     val currencyCode: Column<String> = varchar("currency_code", 10).default("Rp")
     val isActive: Column<Boolean> = bool("is_active").default(true)
     val isStoreEnabled: Column<Boolean> = bool("is_store_enabled").default(true)
-    val store = reference("store", StoreTable)
     val createdAt: Column<Instant> = timestamp("created_at")
     val updatedAt: Column<Instant?> = timestamp("updated_at").nullable()
 }
@@ -36,7 +38,7 @@ object StoreLocationTable : IntIdTable("store_location") {
     val zipCode: Column<String?> = text("zip_code").nullable()
     val latitude: Column<Double?> = double("latitude").nullable()
     val longitude: Column<Double?> = double("longitude").nullable()
-    val store = reference("store", StoreTable)
+    val store = reference("store", StoreTable, onDelete = ReferenceOption.CASCADE)
     val createdAt: Column<Instant> = timestamp("created_at")
     val updatedAt: Column<Instant?> = timestamp("updated_at").nullable()
 }

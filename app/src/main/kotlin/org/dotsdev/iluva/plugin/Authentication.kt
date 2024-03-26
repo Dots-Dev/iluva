@@ -1,32 +1,39 @@
 package org.dotsdev.iluva.plugin
 
+import arrow.core.Either
 import com.auth0.jwt.exceptions.JWTDecodeException
 import com.auth0.jwt.exceptions.SignatureVerificationException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import config.Config
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.auth.HttpAuthHeader
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.jwt.jwt
+import io.ktor.server.auth.parseAuthorizationHeader
 import io.ktor.server.response.respond
 import org.dotsdev.iluva.TokenProvider
-import org.dotsdev.iluva.database.transaction.UserTransaction
-import org.dotsdev.iluva.principal.UserPrincipal
-import org.kodein.di.instance
-import org.kodein.di.ktor.closestDI
+import org.dotsdev.iluva.database.repository.UserPersistence
+import org.koin.ktor.ext.inject
+import org.koin.ktor.plugin.koin
 
 fun Application.configureAuthentication() {
-    val config by closestDI().instance<Config>()
-    val helper by closestDI().instance<TokenProvider>()
-    val userTransaction by closestDI().instance<UserTransaction>()
+    koin {
+        modules(appModule)
+    }
+
+    val config by inject<Config>()
+    val helper by inject<TokenProvider>()
+    val userPersistence by inject<UserPersistence>()
 
     install(Authentication) {
         jwt {
             realm = config.jwt.realm
             verifier(helper.verifier)
             challenge { _, _ ->
-                val header = call.request.headers["Authorization"]
+                val header = Either.catch { (call.request.parseAuthorizationHeader() as? HttpAuthHeader.Single) }
+                    .getOrNull()?.blob
                 header?.let {
                     if (it.isNotEmpty()) {
                         try {
@@ -50,14 +57,14 @@ fun Application.configureAuthentication() {
                     HttpStatusCode.Unauthorized
                 )
             }
-            validate { credential ->
-                credential.payload.getClaim(helper.userIdClaim).asString()?.let { id ->
-                    val user = userTransaction.findByID(id)
-                    user?.let {
-                        UserPrincipal(it)
-                    }
-                }
-            }
+//            validate { credential ->
+//                credential.payload.getClaim(helper.userIdClaim).asString()?.let { id ->
+//                    val user = userPersistence.find(id)
+//                    user?.let {
+//                        UserPrincipal(it)
+//                    }
+//                }
+//            }
         }
     }
 }

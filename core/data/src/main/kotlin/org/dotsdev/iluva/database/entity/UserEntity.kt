@@ -2,6 +2,7 @@ package org.dotsdev.iluva.database.entity
 
 import java.util.UUID
 import org.dotsdev.iluva.User
+import org.dotsdev.iluva.database.table.StoreTable
 import org.dotsdev.iluva.database.table.UserTable
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
@@ -18,6 +19,7 @@ class UserEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var avatar by UserTable.avatar
     var createdAt by UserTable.createdAt
     var updatedAt by UserTable.updatedAt
+    val stores by StoreEntity referrersOn StoreTable.user
 
     fun toDomain() = User(
         id = id.value,

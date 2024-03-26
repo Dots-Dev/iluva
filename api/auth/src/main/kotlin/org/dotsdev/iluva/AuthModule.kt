@@ -1,10 +1,9 @@
 package org.dotsdev.iluva
 
-import org.kodein.di.DI
-import org.kodein.di.bindSingleton
-import org.kodein.di.instance
+import org.koin.dsl.module
 
-val authModule = DI.Module("auth-api") {
-    bindSingleton { AuthRepository(instance()) }
-    bindSingleton { AuthService(instance(), instance(), instance()) }
+
+val authModule = module {
+    single { AuthRepository() }
+    single { AuthService(get(), get(), get()) }
 }

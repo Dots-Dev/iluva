@@ -1,15 +1,13 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.iluva.koin)
+    alias(libs.plugins.iluva.test)
 }
 
 dependencies {
-    implementation(libs.arrow.core)
-    implementation(libs.arrow.fx.coroutines)
+    implementation(projects.core.security)
 
-    implementation(libs.kodein)
-
-    implementation(libs.thing)
-
+    implementation(libs.arrow.core.serialization)
     implementation(libs.ktor.serialization.kotlinx.json.jvm)
 }

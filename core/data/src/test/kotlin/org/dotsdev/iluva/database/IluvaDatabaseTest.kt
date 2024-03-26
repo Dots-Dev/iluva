@@ -4,11 +4,10 @@ import com.zaxxer.hikari.pool.HikariPool.PoolInitializationException
 import config.Config
 import config.DatabaseConfig
 import config.DatabaseType
-import config.JWTConfig
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldNotBe
-import org.dotsdev.iluva.database.IluvaDatabase
+import org.dotsdev.iluva.JWTConfig
 
 class IluvaDatabaseTest : BehaviorSpec({
     val baseConfig = Config(
@@ -34,7 +33,7 @@ class IluvaDatabaseTest : BehaviorSpec({
     context("should connect to database") {
         given("valid config object") {
             `when`("initiate database") {
-                val db = IluvaDatabase(baseConfig).testInitDatabase()
+                val db = DatabaseFactoryImpl(baseConfig).testInitDatabase()
                 then("database should not be null") {
                     db shouldNotBe null
                 }
@@ -43,14 +42,12 @@ class IluvaDatabaseTest : BehaviorSpec({
     }
     context("should throws an exception") {
         given("invalid database credentials") {
+            val invalidCreds = baseConfig.database.copy(username = "invalid", password = "invalid")
             `when`("initiate database") {
-                val db = IluvaDatabase(
-                    baseConfig.copy(
-                        database = baseConfig.database.copy(username = "invalid", password = "invalid")
-                    )
-                )
                 then("throws an exception") {
-                    shouldThrow<PoolInitializationException> { db.testInitDatabase() }
+                    shouldThrow<PoolInitializationException> {
+                        DatabaseFactoryImpl(baseConfig.copy(database = invalidCreds))
+                    }
                 }
             }
         }
